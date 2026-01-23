@@ -1,8 +1,22 @@
 module com.bot.adminfront {
+    // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
 
+    // JSON
+    requires com.fasterxml.jackson.databind;
 
+    // HTTP client
+    requires java.net.http;
+
+    // Jakarta Servlet API (for HttpServletRequest, Cookie, etc.)
+    requires jakarta.servlet;
+
+    // Open packages for FXML
     opens com.bot.adminfront to javafx.fxml;
+    opens com.bot.adminfront.Controller to javafx.fxml;
+
+    // Export packages
     exports com.bot.adminfront;
+    exports com.bot.adminfront.Controller;
 }
