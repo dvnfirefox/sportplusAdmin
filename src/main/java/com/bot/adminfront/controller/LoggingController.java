@@ -1,4 +1,4 @@
-package com.bot.adminfront.Controller;
+package com.bot.adminfront.controller;
 
 import com.bot.adminfront.service.LoggingService;
 import javafx.fxml.FXML;

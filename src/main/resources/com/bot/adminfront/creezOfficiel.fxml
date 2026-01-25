@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="227.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="creation officiel" />
+      <TextField fx:id="nom" layoutX="300.0" layoutY="43.0" />
+      <Text layoutX="144.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom : " textAlignment="RIGHT" wrappingWidth="155.7294921875" />
+      <TextField fx:id="phone" layoutX="300.0" layoutY="67.0" />
+      <Text layoutX="129.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="    numero de telephone : " textAlignment="RIGHT" wrappingWidth="171.0" />
+      <TextField fx:id="courriel" layoutX="300.0" layoutY="91.0" />
+      <Text layoutX="144.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="    courriel : " textAlignment="RIGHT" wrappingWidth="155.7294921875" />
+      <TextField fx:id="adresse" layoutX="300.0" layoutY="115.0" />
+      <Text layoutX="164.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="     adresse : " textAlignment="RIGHT" wrappingWidth="135.7294921875" />
+      <TextField fx:id="federation" layoutX="300.0" layoutY="139.0" />
+      <Text layoutX="144.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="    federation : " textAlignment="RIGHT" wrappingWidth="155.7294921875" />
+      <TextField fx:id="role" layoutX="300.0" layoutY="163.0" />
+      <Text layoutX="164.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="     role : " textAlignment="RIGHT" wrappingWidth="135.7294921875" />
+   </children>
+</AnchorPane>

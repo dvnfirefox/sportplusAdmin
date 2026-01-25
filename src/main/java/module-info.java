@@ -14,9 +14,12 @@ module com.bot.adminfront {
 
     // Open packages for FXML
     opens com.bot.adminfront to javafx.fxml;
-    opens com.bot.adminfront.Controller to javafx.fxml;
+    opens com.bot.adminfront.controller to javafx.fxml;
+    opens com.bot.adminfront.controller.utilisateur to javafx.fxml;
+    opens com.bot.adminfront.controller.officiel to javafx.fxml;
+
 
     // Export packages
     exports com.bot.adminfront;
-    exports com.bot.adminfront.Controller;
+    exports com.bot.adminfront.controller;
 }

@@ -1,9 +1,8 @@
-package com.bot.adminfront.Controller;
+package com.bot.adminfront.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.Button;
 
 import java.io.IOException;
 
@@ -13,23 +12,25 @@ public class MainMenuController {
     @FXML
     private AnchorPane contentPane;
 
-    // Left-side navigation buttons
-    @FXML
-    private Button utilisateur;
-    @FXML
-    private Button officiel;
-    @FXML
-    private Button tournois;
-    @FXML
-    private Button partie;
-    @FXML
-    private Button stat;
-
     // Called automatically after FXML loads
     @FXML
     public void initialize() {
-        loadContent("/com/bot/adminfront/Utilisateur.fxml");
 
+    }
+
+    @FXML
+    public void creezUtilisateur(){
+        loadContent("/com/bot/adminfront/creezUtilisateur.fxml");
+    }
+
+    @FXML
+    public void creezOfficiel(){
+        loadContent("/com/bot/adminfront/creezOfficiel.fxml");
+    }
+
+    @FXML
+    public void creezTournois(){
+        loadContent("/com/bot/adminfront/creezTournois.fxml");
     }
 
 
