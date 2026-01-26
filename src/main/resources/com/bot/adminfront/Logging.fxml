@@ -17,5 +17,5 @@
     <Label fx:id="info" />
    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mot de passe" />
    <TextField fx:id="password" />
-   <Button mnemonicParsing="false" onAction="#loggingButtonClick" text="Button" />
+   <Button mnemonicParsing="false" onAction="#loggingButtonClick" text="connection" />
 </VBox>

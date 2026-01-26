@@ -45,7 +45,7 @@
         <Menu mnemonicParsing="false" text="utilisateur">
           <items>
             <MenuItem mnemonicParsing="false"  text="creez" onAction="#creezUtilisateur" />
-            <MenuItem mnemonicParsing="false"  text="supprimer" />
+            <MenuItem mnemonicParsing="false"  text="supprimer" onAction="#supprimerUtilisateur" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Officiel">

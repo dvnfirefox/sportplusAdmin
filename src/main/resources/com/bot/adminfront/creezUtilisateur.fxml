@@ -16,6 +16,6 @@
       <Text layoutX="164.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="     mot de passe : " wrappingWidth="135.7294921875" />
       <CheckBox fx:id="admin" layoutX="256.0" layoutY="97.0" mnemonicParsing="false" text="Admin" />
       <Button fx:id="enter" layoutX="269.0" layoutY="153.0" mnemonicParsing="false" text="inscrire" onAction="#creez" />
-      <Label fx:id="statut" layoutX="282.0" layoutY="129.0" text="Label" />
+      <Label fx:id="statut" layoutX="282.0" layoutY="129.0" text="Status" />
    </children>
 </AnchorPane>

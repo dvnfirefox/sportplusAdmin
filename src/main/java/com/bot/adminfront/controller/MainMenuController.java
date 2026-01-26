@@ -18,10 +18,13 @@ public class MainMenuController {
 
     }
 
+    //suite de de methode qui permet a la page javafx de controller la page afficher
     @FXML
     public void creezUtilisateur(){
         loadContent("/com/bot/adminfront/creezUtilisateur.fxml");
     }
+    @FXML
+    public void supprimerUtilisateur(){loadContent("/com/bot/adminfront/supprimerUtilisateur.fxml");}
 
     @FXML
     public void creezOfficiel(){
@@ -34,7 +37,7 @@ public class MainMenuController {
     }
 
 
-    // Helper method to load an FXML into the middle pane
+    //methode pour changer le contenue de la fenetre selon la page demander par l'utilisateur
     private void loadContent(String fxmlPath) {
         try {
             AnchorPane pane = FXMLLoader.load(getClass().getResource(fxmlPath));

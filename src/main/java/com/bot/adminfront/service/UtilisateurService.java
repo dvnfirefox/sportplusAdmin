@@ -1,11 +1,17 @@
 package com.bot.adminfront.service;
 
 import com.bot.adminfront.tool.Json;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UtilisateurService {
 
+
+    //verification des donne forunie par le formulaire de creation dun utilisateur
     public ObjectNode creez(String nom, String password, boolean admin) {
         ObjectNode json = Json.createNode();
         ObjectNode response = Json.createNode();
@@ -26,4 +32,21 @@ public class UtilisateurService {
         }
         return response;
     }
+    public List<String> recherche(String keyword) {
+        JsonNode arrayNode = HttpService.get("utilisateur/recherche?keyword=" + keyword);
+        List<String> noms = new ArrayList<>();
+        if (arrayNode != null && arrayNode.isArray()) {
+            for (JsonNode node : arrayNode) {
+                noms.add(node.asText());
+            }
+        }
+        return noms;
+    }
+    public void supprimer(String nom){
+        ObjectNode json = Json.createNode();
+        json.put("nom", nom);
+        //faire un call api avec sur ladresse utilisateur/supprimer avec le nom demander
+        HttpService.post("utilisateur/supprimer", json.toString());
+    }
 }
+

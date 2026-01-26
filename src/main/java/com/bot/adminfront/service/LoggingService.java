@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class LoggingService {
 
+    //fait un json pour permmetre la transmission plus simple via un api
     public Boolean logging(String nom, String password) {
         ObjectNode json = Json.createNode();
         json.put("nom", nom);
@@ -18,3 +19,7 @@ public class LoggingService {
         }
     }
 }
+
+
+
+
