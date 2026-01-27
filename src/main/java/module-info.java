@@ -11,6 +11,7 @@ module com.bot.adminfront {
 
     // Jakarta Servlet API (for HttpServletRequest, Cookie, etc.)
     requires jakarta.servlet;
+    requires java.desktop;
 
     // Open packages for FXML
     opens com.bot.adminfront to javafx.fxml;

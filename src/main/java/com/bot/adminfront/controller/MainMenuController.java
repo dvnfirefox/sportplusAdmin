@@ -30,6 +30,8 @@ public class MainMenuController {
     public void creezOfficiel(){
         loadContent("/com/bot/adminfront/creezOfficiel.fxml");
     }
+    @FXML
+    public void supprimerOfficiel(){loadContent("/com/bot/adminfront/supprimerOfficiel.fxml");}
 
     @FXML
     public void creezTournois(){

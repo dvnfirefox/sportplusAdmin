@@ -17,7 +17,6 @@ public class HttpService {
     // la base de donner et de la transformation des donne
     public static ObjectNode post(String endpoint, String body) {
         HttpClient client = HttpClient.newHttpClient();
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/" + endpoint))
                 .header("Content-Type", "application/json")

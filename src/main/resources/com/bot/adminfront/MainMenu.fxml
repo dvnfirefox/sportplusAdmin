@@ -51,7 +51,7 @@
         <Menu mnemonicParsing="false" text="Officiel">
           <items>
             <MenuItem mnemonicParsing="false" text="creez" onAction="#creezOfficiel" />
-            <MenuItem mnemonicParsing="false" text="supprimer" />
+            <MenuItem mnemonicParsing="false" text="supprimer" onAction="#supprimerOfficiel"/>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="tournois">
