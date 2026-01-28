@@ -15,7 +15,7 @@ public class HttpService {
     private static final ObjectMapper mapper = new ObjectMapper();
     // une methode qui permet de faire des demande au serveur pour permettre les differente transaction avec
     // la base de donner et de la transformation des donne
-    public static ObjectNode post(String endpoint, String body) {
+    public static JsonNode post(String endpoint, String body) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/" + endpoint))
@@ -25,9 +25,8 @@ public class HttpService {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            // Parse the response body string into ObjectNode
-            return (ObjectNode) mapper.readTree(response.body());
+            // Parse the server response correctly
+            return mapper.readTree(response.body());
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("HTTP request failed", e);
         }

@@ -2,11 +2,13 @@ package com.bot.adminfront.controller.officiel;
 
 import com.bot.adminfront.service.OfficielService;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
 
-public class creezController {
+public class CreezController {
 
     @FXML
     public TextField nom;
@@ -54,6 +56,7 @@ public class creezController {
     private boolean isEmpty(TextField field) {
         return field.getText() == null || field.getText().trim().isEmpty();
     }
+
 
 
 

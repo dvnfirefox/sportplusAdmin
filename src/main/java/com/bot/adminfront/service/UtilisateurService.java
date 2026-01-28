@@ -23,7 +23,7 @@ public class UtilisateurService {
         json.put("nom", nom);
         json.put("password", password);
 
-        ObjectNode result = HttpService.post("utilisateur/creez", json.toString());
+        JsonNode result = HttpService.post("utilisateur/creez", json.toString());
         if (result != null) {
             response.put("message", result.get("message"));
             response.put("status", result.get("status"));

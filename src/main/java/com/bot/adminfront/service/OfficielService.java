@@ -20,7 +20,7 @@ public class OfficielService {
         json.put("federation", federation);
         json.put("role", role);
 
-        ObjectNode result = HttpService.post("officiel/creez", json.toString());
+        JsonNode result = HttpService.post("officiel/creez", json.toString());
 
         if (result == null) {
             return false; // request failed or no response
