@@ -19,6 +19,7 @@ module com.bot.adminfront {
     opens com.bot.adminfront.controller.utilisateur to javafx.fxml;
     opens com.bot.adminfront.controller.officiel to javafx.fxml;
     opens com.bot.adminfront.controller.tournois to javafx.fxml;
+    opens com.bot.adminfront.model to javafx.base,  javafx.fxml;
 
 
     // Export packages

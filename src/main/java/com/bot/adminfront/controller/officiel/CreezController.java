@@ -19,8 +19,6 @@ public class CreezController {
     @FXML
     public TextField adresse;
     @FXML
-    public TextField federation;
-    @FXML
     public TextField role;
     @FXML
     public Label status;
@@ -33,18 +31,16 @@ public class CreezController {
                 isEmpty(phone) ||
                 isEmpty(courriel) ||
                 isEmpty(adresse) ||
-                isEmpty(federation) ||
                 isEmpty(role)) {
             //changer le statut de du formulaire si tout ou un des champs est vide
             status.setText("Tous les champs sont obligatoires.");
         }
         //creation dun officiel
-        if (officielService.creez(nom.getText(), phone.getText(),courriel.getText(),adresse.getText(),federation.getText(),role.getText())) {
+        if (officielService.creez(nom.getText(), phone.getText(),courriel.getText(),adresse.getText(),role.getText())) {
             nom.clear();
             phone.clear();
             courriel.clear();
             adresse.clear();
-            federation.clear();
             role.clear();
             status.setText("Creation reussi");
         }else{

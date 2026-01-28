@@ -32,11 +32,12 @@ public class MainMenuController {
     }
     @FXML
     public void supprimerOfficiel(){loadContent("/com/bot/adminfront/supprimerOfficiel.fxml");}
-
     @FXML
     public void creezTournois(){
         loadContent("/com/bot/adminfront/creezTournois.fxml");
     }
+    @FXML
+    public void rechercheTournois(){loadContent("/com/bot/adminfront/rechercheTournois.fxml");}
 
 
     //methode pour changer le contenue de la fenetre selon la page demander par l'utilisateur

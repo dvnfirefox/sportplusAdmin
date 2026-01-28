@@ -16,9 +16,9 @@ public class CreezController {
     @FXML
     private Spinner<Integer> maximum;
     @FXML
-    private TextField categorie;
-    @FXML
     private TextField federation;
+    @FXML
+    private ComboBox<String> categorie;
     @FXML
     private Label status;
 
@@ -51,12 +51,20 @@ public class CreezController {
         maximum.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1)
         );
+        categorie.getItems().addAll(
+                "Moustique",
+                "Atome",
+                "Peewee",
+                "Bantam",
+                "Midget",
+                "Junior"
+        );
+        categorie.setValue("Peewee (11-12 ans)");
     }
 
 
     public void creez() {
-        if (categorie.getText().isEmpty()
-                || federation.getText().isEmpty()
+        if (federation.getText().isEmpty()
                 || dateDebut.getValue() == null
                 || dateFin.getValue() == null
                 || maximum.getValue() == null) {  // Spinner can't be null, but just in case
@@ -73,7 +81,7 @@ public class CreezController {
                 dateDebut.getValue(),
                 dateFin.getValue(),
                 maximum.getValue(),   // <-- Spinner value
-                categorie.getText(),
+                categorie.getValue(),
                 federation.getText()
         );
 

@@ -44,22 +44,21 @@
       <menus>
         <Menu mnemonicParsing="false" text="utilisateur">
           <items>
-            <MenuItem mnemonicParsing="false"  text="creez" onAction="#creezUtilisateur" />
-            <MenuItem mnemonicParsing="false"  text="supprimer" onAction="#supprimerUtilisateur" />
+            <MenuItem mnemonicParsing="false" onAction="#creezUtilisateur" text="creez" />
+            <MenuItem mnemonicParsing="false" onAction="#supprimerUtilisateur" text="supprimer" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Officiel">
           <items>
-            <MenuItem mnemonicParsing="false" text="creez" onAction="#creezOfficiel" />
-            <MenuItem mnemonicParsing="false" text="supprimer" onAction="#supprimerOfficiel"/>
+            <MenuItem mnemonicParsing="false" onAction="#creezOfficiel" text="creez" />
+            <MenuItem mnemonicParsing="false" onAction="#supprimerOfficiel" text="supprimer" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="tournois">
           <items>
-            <MenuItem mnemonicParsing="false" text="creez" onAction="#creezTournois" />
-            <MenuItem mnemonicParsing="false" text="supprimer" />
-            <MenuItem mnemonicParsing="false" text="recherche" />
-            <MenuItem mnemonicParsing="false" text="statisque" />
+            <MenuItem mnemonicParsing="false" onAction="#creezTournois" text="creez" />
+            <MenuItem mnemonicParsing="false" onAction="#rechercheTournois" text="recherche" />
+            <MenuItem mnemonicParsing="false" text="statistique" />
             <MenuItem mnemonicParsing="false" text="calendrier" />
           </items>
         </Menu>
@@ -74,7 +73,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="contentPane" layoutX="2.0" layoutY="1.0" prefHeight="373.0" prefWidth="640.0" />
+            <AnchorPane fx:id="contentPane" layoutX="2.0" layoutY="1.0" prefHeight="520.0" prefWidth="789.0" />
          </children>
     </AnchorPane>
   </children>

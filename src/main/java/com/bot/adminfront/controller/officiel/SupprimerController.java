@@ -28,7 +28,7 @@ public class SupprimerController {
     @FXML
     public void initialize() {
         // Setup ChoiceBox with some modes (adjust as needed)
-        filterChoiceBox.getItems().addAll("nom", "numerodetelephone", "courriel", "adresse", "adresse", "federation", "role");
+        filterChoiceBox.getItems().addAll("nom", "numerodetelephone", "courriel", "adresse", "adresse", "role");
         filterChoiceBox.setValue("nom"); // default
 
         // Initial load

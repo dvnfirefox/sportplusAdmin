@@ -6,18 +6,17 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO remove federation
 public class OfficielService {
 
     public boolean creez(String nom, String phone, String courriel,
-                         String adresse, String federation, String role) {
+                         String adresse,String role) {
 
         ObjectNode json = Json.createNode();
         json.put("nom", nom);
         json.put("phone", phone);
         json.put("courriel", courriel);
         json.put("adresse", adresse);
-        json.put("federation", federation);
         json.put("role", role);
 
         JsonNode result = HttpService.post("officiel/creez", json.toString());
