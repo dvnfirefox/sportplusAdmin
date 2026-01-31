@@ -32,12 +32,12 @@
 
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="debutColumn" text="Début" prefWidth="100"/>
-            <TableColumn fx:id="finColumn" text="Fin" prefWidth="100"/>
+            <TableColumn fx:id="debutColumn" text="Début" prefWidth="150"/>
+            <TableColumn fx:id="finColumn" text="Fin" prefWidth="150"/>
             <TableColumn fx:id="maximumColumn" text="Maximum" prefWidth="80"/>
             <TableColumn fx:id="federationColumn" text="Fédération" prefWidth="120"/>
             <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="100"/>
-            <TableColumn fx:id="actionColumn" text="Action" prefWidth="100"/>
+            <TableColumn fx:id="actionColumn" text="Action" prefWidth="200"/>
         </columns>
     </TableView>
 </AnchorPane>
