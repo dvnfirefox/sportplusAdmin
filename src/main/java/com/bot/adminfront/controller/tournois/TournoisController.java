@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
@@ -15,40 +16,37 @@ import java.util.List;
 
 public class TournoisController {
 
-    @FXML
-    private TableView<Tournoi> tableView;
+    // ================= FXML =================
 
-    @FXML
-    private TableColumn<Tournoi, String> idColumn;
-    @FXML
-    private TableColumn<Tournoi, String> debutColumn;
-    @FXML
-    private TableColumn<Tournoi, String> finColumn;
-    @FXML
-    private TableColumn<Tournoi, String> maximumColumn;
-    @FXML
-    private TableColumn<Tournoi, String> federationColumn;
-    @FXML
-    private TableColumn<Tournoi, String> categorieColumn;
-    @FXML
-    private TableColumn<Tournoi, Button> actionColumn;
+    @FXML private TableView<Tournoi> tableView;
 
-    @FXML
-    private HBox searchContainer;
+    @FXML private TableColumn<Tournoi, String> idColumn;
+    @FXML private TableColumn<Tournoi, String> debutColumn;
+    @FXML private TableColumn<Tournoi, String> finColumn;
+    @FXML private TableColumn<Tournoi, String> maximumColumn;
+    @FXML private TableColumn<Tournoi, String> federationColumn;
+    @FXML private TableColumn<Tournoi, String> categorieColumn;
+    @FXML private TableColumn<Tournoi, HBox> actionColumn;
 
-    @FXML
-    private ChoiceBox<String> filterChoiceBox;
+    @FXML private HBox searchContainer;
+    @FXML private ChoiceBox<String> filterChoiceBox;
 
-    private TextField searchField = new TextField();
-    private DatePicker datePicker1 = new DatePicker();
-    private DatePicker datePicker2 = new DatePicker(); // used for "entre"
+    // ================= STATE =================
 
-    private TournoisService tournoisService = new TournoisService();
-    private ObservableList<Tournoi> tournoisList = FXCollections.observableArrayList();
+    private final TextField searchField = new TextField();
+    private final DatePicker datePicker1 = new DatePicker();
+    private final DatePicker datePicker2 = new DatePicker();
+
+    private final TournoisService tournoisService = new TournoisService();
+    private final ObservableList<Tournoi> tournoisList = FXCollections.observableArrayList();
+
+    // ================= INITIALIZE =================
 
     @FXML
     public void initialize() {
-        // Setup TableView columns
+
+        tableView.setEditable(true);
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         debutColumn.setCellValueFactory(new PropertyValueFactory<>("debut"));
         finColumn.setCellValueFactory(new PropertyValueFactory<>("fin"));
@@ -57,67 +55,65 @@ public class TournoisController {
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         actionColumn.setCellValueFactory(new PropertyValueFactory<>("actionButton"));
 
-        // Setup ChoiceBox
-        filterChoiceBox.getItems().addAll("debut", "fin", "avant", "apres", "entre", "federation", "categorie");
+        debutColumn.setCellFactory(col -> new DatePickerTableCell(true));
+        finColumn.setCellFactory(col -> new DatePickerTableCell(false));
+        maximumColumn.setCellFactory(col -> new SpinnerTableCell(1, 500));
+        federationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        categorieColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        federationColumn.setOnEditCommit(e ->
+                e.getRowValue().setFederation(e.getNewValue()));
+        categorieColumn.setOnEditCommit(e ->
+                e.getRowValue().setCategorie(e.getNewValue()));
+
+        filterChoiceBox.getItems().addAll(
+                "debut", "fin", "avant", "apres", "entre", "federation", "categorie"
+        );
         filterChoiceBox.setValue("");
 
-        // Initially show TextField
-        searchField.setPromptText("Rechercher un tournoi...");
-        searchContainer.getChildren().setAll(searchField);
+        filterChoiceBox.getSelectionModel().selectedItemProperty()
+                .addListener((obs, o, n) -> switchSearchInput(n));
 
-        // TextField listener
-        searchField.textProperty().addListener((obs, oldText, newText) ->
-                searchAndRefresh(newText, filterChoiceBox.getValue()));
+        searchField.textProperty().addListener((obs, o, n) ->
+                searchAndRefresh(n, filterChoiceBox.getValue()));
 
-        // ChoiceBox listener
-        filterChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldMode, newMode) ->
-                switchSearchInput(newMode));
-
-        // Load initial data
-        refreshTable(tournoisService.recherche("", filterChoiceBox.getValue()));
+        refreshTable(tournoisService.recherche("", ""));
     }
 
-    // Switch input type dynamically
+    // ================= SEARCH =================
+
     private void switchSearchInput(String mode) {
         searchContainer.getChildren().clear();
+        if (mode == null) return;
 
-        if (mode.equals("debut") || mode.equals("fin") || mode.equals("avant") || mode.equals("apres")) {
-            // Single DatePicker
+        if (mode.matches("debut|fin|avant|apres")) {
             datePicker1.setValue(null);
-            datePicker1.setPromptText("Choisir une date...");
             searchContainer.getChildren().add(datePicker1);
-
-            datePicker1.valueProperty().addListener((obs, oldVal, newVal) -> {
-                String keyword = newVal != null ? newVal.toString() : "";
-                searchAndRefresh(keyword, mode);
-            });
-
-        } else if (mode.equals("entre")) {
-            // Two DatePickers
+            datePicker1.valueProperty().addListener((o, ov, nv) ->
+                    searchAndRefresh(nv != null ? nv.toString() : "", mode));
+        }
+        else if ("entre".equals(mode)) {
             datePicker1.setValue(null);
             datePicker2.setValue(null);
-            datePicker1.setPromptText("Date début");
-            datePicker2.setPromptText("Date fin");
             searchContainer.getChildren().addAll(datePicker1, datePicker2);
-
-            datePicker1.valueProperty().addListener((obs, oldVal, newVal) -> triggerEntreSearch(mode));
-            datePicker2.valueProperty().addListener((obs, oldVal, newVal) -> triggerEntreSearch(mode));
-
-        } else {
-            // Default TextField
+            datePicker1.valueProperty().addListener((o, ov, nv) -> triggerBetween(mode));
+            datePicker2.valueProperty().addListener((o, ov, nv) -> triggerBetween(mode));
+        }
+        else {
             searchField.clear();
             searchContainer.getChildren().add(searchField);
         }
     }
 
-    private void triggerEntreSearch(String mode) {
+    private void triggerBetween(String mode) {
         if (datePicker1.getValue() != null && datePicker2.getValue() != null) {
-            String keyword = datePicker1.getValue() + "," + datePicker2.getValue(); // "startDate,endDate"
-            searchAndRefresh(keyword, mode);
+            searchAndRefresh(
+                    datePicker1.getValue() + "," + datePicker2.getValue(),
+                    mode
+            );
         }
     }
 
-    // Perform search in background
     private void searchAndRefresh(String keyword, String mode) {
         new Thread(() -> {
             List<Tournoi> result = tournoisService.recherche(keyword, mode);
@@ -125,56 +121,109 @@ public class TournoisController {
         }).start();
     }
 
-    // Refresh TableView
+    // ================= TABLE =================
+
     private void refreshTable(List<Tournoi> list) {
         tournoisList.clear();
+
         for (Tournoi t : list) {
-            Button deleteBtn = new Button("Supprimer");
-            deleteBtn.setOnAction(e -> supprimer(t.getId(), getCurrentKeyword(), filterChoiceBox.getValue()));
-            t.setActionButton(deleteBtn);
+            Button save = new Button("Enregistrer");
+            Button delete = new Button("Supprimer");
+
+            save.setOnAction(e -> {
+                if (tournoisService.modifier(t)) {
+                    new Alert(Alert.AlertType.INFORMATION, "Tournoi modifié").showAndWait();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Erreur modification").showAndWait();
+                }
+            });
+
+            delete.setOnAction(e -> supprimer(t));
+
+            t.setActionButton(new HBox(5, save, delete));
         }
+
         tournoisList.addAll(list);
         tableView.setItems(tournoisList);
     }
 
-    private void supprimer(String id, String keyword, String mode) {
-        // Find the tournament in the current list
-        Tournoi tournoi = tournoisList.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+    // ================= CRUD =================
 
-        if (tournoi == null) return; // safety check
-
-        LocalDate dateDebut = LocalDate.parse(tournoi.getDebut());
-        LocalDate today = LocalDate.now();
-
-        if (dateDebut.isAfter(today)) { // only delete if start date is tomorrow or later
-            tournoisService.supprimer(id);
-            searchAndRefresh(keyword, mode);
+    private void supprimer(Tournoi t) {
+        LocalDate debut = LocalDate.parse(t.getDebut());
+        if (debut.isAfter(LocalDate.now())) {
+            tournoisService.supprimer(t.getId());
+            searchAndRefresh("", filterChoiceBox.getValue());
         } else {
-            // Show alert if deletion not allowed
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Suppression interdite");
-            alert.setHeaderText(null);
-            alert.setContentText("Vous ne pouvez supprimer un tournoi dont le début est aujourd'hui ou déjà passé.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING,
+                    "Impossible de supprimer un tournoi déjà commencé").showAndWait();
         }
     }
 
-    // Get the current keyword depending on input type
-    private String getCurrentKeyword() {
-        String mode = filterChoiceBox.getValue();
-        if (mode.equals("debut") || mode.equals("fin") || mode.equals("avant") || mode.equals("apres")) {
-            return datePicker1.getValue() != null ? datePicker1.getValue().toString() : "";
-        } else if (mode.equals("entre")) {
-            if (datePicker1.getValue() != null && datePicker2.getValue() != null) {
-                return datePicker1.getValue() + "," + datePicker2.getValue();
+    // ================= CUSTOM CELLS =================
+
+    public static class DatePickerTableCell extends TableCell<Tournoi, String> {
+
+        private final DatePicker picker = new DatePicker();
+        private final boolean isDebut;
+
+        public DatePickerTableCell(boolean isDebut) {
+            this.isDebut = isDebut;
+
+            picker.valueProperty().addListener((obs, o, n) -> {
+                if (n != null && getTableRow() != null && getTableRow().getItem() != null) {
+                    Tournoi t = getTableRow().getItem();
+                    if (isDebut) t.setDebut(n.toString());
+                    else t.setFin(n.toString());
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty || getTableRow().getItem() == null) {
+                setGraphic(null);
             } else {
-                return "";
+                picker.setValue(item != null ? LocalDate.parse(item) : null);
+                setGraphic(picker);
             }
-        } else {
-            return searchField.getText().trim();
+        }
+    }
+
+    public static class SpinnerTableCell extends TableCell<Tournoi, String> {
+
+        private final Spinner<Integer> spinner;
+        private final SpinnerValueFactory.IntegerSpinnerValueFactory factory;
+
+        public SpinnerTableCell(int min, int max) {
+            factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max);
+            spinner = new Spinner<>();
+            spinner.setValueFactory(factory);
+            spinner.setEditable(true);
+
+            spinner.valueProperty().addListener((obs, o, n) -> {
+                if (n != null && getTableRow() != null && getTableRow().getItem() != null) {
+                    getTableRow().getItem().setMaximum(String.valueOf(n));
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty || getTableRow().getItem() == null) {
+                setGraphic(null);
+            } else {
+                try {
+                    factory.setValue(item != null ? Integer.parseInt(item) : factory.getMin());
+                } catch (NumberFormatException e) {
+                    factory.setValue(factory.getMin());
+                }
+                setGraphic(spinner);
+            }
         }
     }
 }

@@ -73,7 +73,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="contentPane" layoutX="2.0" layoutY="1.0" prefHeight="520.0" prefWidth="789.0" />
+            <AnchorPane fx:id="contentPane" layoutX="2.0" layoutY="1.0" prefHeight="770.0" prefWidth="1061.0" />
          </children>
     </AnchorPane>
   </children>

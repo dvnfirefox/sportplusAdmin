@@ -11,7 +11,7 @@ public class LoggingService {
         ObjectNode json = Json.createNode();
         json.put("nom", nom);
         json.put("password", password);
-        JsonNode result = HttpService.post("session/connection", json.toString());
+        JsonNode result = HttpService.post("session/connectionadmin", json.toString());
         System.out.println(result);
         if ((result != null) && result.get("connection").asBoolean()) {
             return true;

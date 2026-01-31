@@ -1,23 +1,15 @@
 package com.bot.adminfront.service;
 
-
 import com.bot.adminfront.model.Tournoi;
 import com.bot.adminfront.tool.Json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TournoisService {
-
 
     public boolean creez(LocalDate debut, LocalDate fin, int maximum, String categorie, String federation) {
         ObjectNode json = Json.createNode();
@@ -28,16 +20,7 @@ public class TournoisService {
         json.put("federation", federation);
 
         JsonNode result = HttpService.post("tournois/creez", json.toString());
-
-        if (result == null) {
-            return false;
-        }
-
-        if (!result.has("status")) {
-            return false;
-        }
-
-        return result.get("status").asBoolean();
+        return result != null && result.has("status") && result.get("status").asBoolean();
     }
 
     public List<Tournoi> recherche(String keyword, String champ) {
@@ -46,11 +29,7 @@ public class TournoisService {
 
         try {
             switch (champ.toLowerCase()) {
-                case "debut":
-                case "avant":
-                case "apres":
-                case "fin":
-                    // Map ChoiceBox value to backend type
+                case "debut", "avant", "apres", "fin" -> {
                     String backendType = switch (champ.toLowerCase()) {
                         case "debut" -> "debut.before";
                         case "fin" -> "fin.after";
@@ -61,25 +40,18 @@ public class TournoisService {
                     arrayNode = HttpService.get(
                             "tournois/recherche?date=" + keyword + "&type=" + backendType
                     );
-                    break;
-
-                case "entre":
-                    // keyword format: "startDate,endDate"
+                }
+                case "entre" -> {
                     String[] dates = keyword.split(",");
                     if (dates.length == 2) {
-                        String start = dates[0];
-                        String end = dates[1];
                         arrayNode = HttpService.get(
-                                "tournois/recherche/between?debut=" + start + "&fin=" + end + "&type=debut"
+                                "tournois/recherche/between?debut=" + dates[0] + "&fin=" + dates[1] + "&type=debut"
                         );
                     }
-                    break;
-
-                default:
-                    // text search
-                    arrayNode = HttpService.get(
-                            "tournois/recherche/champ?keyword=" + keyword + "&champ=" + champ
-                    );
+                }
+                default -> arrayNode = HttpService.get(
+                        "tournois/recherche/champ?keyword=" + keyword + "&champ=" + champ
+                );
             }
 
             if (arrayNode != null && arrayNode.isArray()) {
@@ -102,15 +74,35 @@ public class TournoisService {
         return tournoisList;
     }
 
-
-
     /**
      * Supprime un tournoi par son ID
      */
     public void supprimer(String id) {
         ObjectNode json = Json.createNode();
         json.put("id", id);
-
         HttpService.post("tournois/supprimer", json.toString());
+    }
+
+    /**
+     * Modifie un tournoi (envoi l'objet complet au backend)
+     */
+    public boolean modifier(Tournoi t) {
+        try {
+            ObjectNode json = Json.createNode();
+            json.put("id", Long.parseLong(t.getId()));
+            json.put("datedebut", t.getDebut());
+            json.put("datefin", t.getFin());
+            json.put("categorie", t.getCategorie());
+            json.put("federation", t.getFederation());
+            json.put("maximum", Integer.parseInt(t.getMaximum()));
+
+            JsonNode result = HttpService.post("tournois/modifier", json.toString());
+            System.out.println(result.toString());
+            return result.asBoolean();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }
