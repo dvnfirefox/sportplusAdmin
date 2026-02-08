@@ -129,6 +129,7 @@ public class TournoisController {
         for (Tournoi t : list) {
             Button save = new Button("Enregistrer");
             Button delete = new Button("Supprimer");
+            Button calendrier = new Button("Calendrier");
 
             save.setOnAction(e -> {
                 if (tournoisService.modifier(t)) {
@@ -140,7 +141,24 @@ public class TournoisController {
 
             delete.setOnAction(e -> supprimer(t));
 
-            t.setActionButton(new HBox(5, save, delete));
+            calendrier.setOnAction(e -> calendrier(t));
+
+            // Enable calendrier button only if we are within 7 days before debut or after
+            LocalDate debut = LocalDate.parse(t.getDebut());
+            LocalDate oneWeekBeforeDebut = debut.minusWeeks(1);
+            LocalDate today = LocalDate.now();
+
+            // Check if tournament has parties
+            boolean hasParties = t.getParties() != null && !t.getParties().isEmpty();
+
+            // Disable if debut is more than 7 days in the future OR if tournament already has parties
+            calendrier.setDisable(today.isBefore(oneWeekBeforeDebut) || hasParties);
+
+            // Disable save and delete when tournament has parties ← ADD THESE TWO LINES
+            save.setDisable(hasParties);
+            delete.setDisable(hasParties);
+
+            t.setActionButton(new HBox(5, save, delete, calendrier));
         }
 
         tournoisList.addAll(list);
@@ -158,6 +176,11 @@ public class TournoisController {
             new Alert(Alert.AlertType.WARNING,
                     "Impossible de supprimer un tournoi déjà commencé").showAndWait();
         }
+    }
+
+    private void calendrier(Tournoi t) {
+        tournoisService.calendrier(t.getId());
+
     }
 
     // ================= CUSTOM CELLS =================

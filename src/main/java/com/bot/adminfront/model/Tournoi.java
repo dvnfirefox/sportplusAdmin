@@ -1,6 +1,7 @@
 package com.bot.adminfront.model;
 
 import javafx.scene.layout.HBox;
+import java.util.List;  // ← ADD THIS IMPORT
 
 public class Tournoi {
 
@@ -10,11 +11,14 @@ public class Tournoi {
     private String maximum;
     private String federation;
     private String categorie;
+    private List<Partie> parties;  // ← ADD THIS FIELD
 
     // Colonne Actions (Enregistrer / Supprimer)
     private HBox actionButton;
 
     // Constructeur
+    public Tournoi() {}
+
     public Tournoi(String id,
                    String debut,
                    String fin,
@@ -58,6 +62,10 @@ public class Tournoi {
         return actionButton;
     }
 
+    public List<Partie> getParties() {  // ← ADD THIS GETTER
+        return parties;
+    }
+
     // ===== Setters =====
     public void setId(String id) {
         this.id = id;
@@ -85,5 +93,9 @@ public class Tournoi {
 
     public void setActionButton(HBox actionButton) {
         this.actionButton = actionButton;
+    }
+
+    public void setParties(List<Partie> parties) {  // ← ADD THIS SETTER
+        this.parties = parties;
     }
 }

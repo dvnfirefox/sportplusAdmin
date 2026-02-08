@@ -16,7 +16,7 @@
           AnchorPane.rightAnchor="10">
 
         <TextField fx:id="searchField"
-                   promptText="Rechercher un utilisateur..."
+                   promptText="Rechercher un officiel..."
                    HBox.hgrow="ALWAYS"/>
 
         <ChoiceBox fx:id="filterChoiceBox"

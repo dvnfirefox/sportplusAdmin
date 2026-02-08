@@ -37,7 +37,7 @@
             <TableColumn fx:id="maximumColumn" text="Maximum" prefWidth="80"/>
             <TableColumn fx:id="federationColumn" text="Fédération" prefWidth="120"/>
             <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="100"/>
-            <TableColumn fx:id="actionColumn" text="Action" prefWidth="200"/>
+            <TableColumn fx:id="actionColumn" text="Action" prefWidth="300"/>
         </columns>
     </TableView>
 </AnchorPane>

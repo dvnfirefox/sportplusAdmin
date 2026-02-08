@@ -1,5 +1,6 @@
 package com.bot.adminfront.service;
 
+import com.bot.adminfront.model.Partie;
 import com.bot.adminfront.model.Tournoi;
 import com.bot.adminfront.tool.Json;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,7 +64,21 @@ public class TournoisService {
                     String federation = node.get("federation").asText();
                     String categorie = node.get("categorie").asText();
 
-                    tournoisList.add(new Tournoi(id, debut, fin, maximum, federation, categorie));
+                    Tournoi tournoi = new Tournoi(id, debut, fin, maximum, federation, categorie);
+
+                    // Parse parties array ← ADD THIS SECTION
+                    if (node.has("parties") && node.get("parties").isArray()) {
+                        List<Partie> parties = new ArrayList<>();
+                        for (JsonNode partieNode : node.get("parties")) {
+                            // We just need to know if parties exist, so we can create minimal Partie objects
+                            Partie partie = new Partie();
+                            partie.setId(partieNode.get("id").asLong());
+                            parties.add(partie);
+                        }
+                        tournoi.setParties(parties);
+                    }
+
+                    tournoisList.add(tournoi);
                 }
             }
 
@@ -104,5 +119,13 @@ public class TournoisService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public void calendrier(String id) {
+        ObjectNode json = Json.createNode();
+        json.put("id", id);
+        String jsonString = json.toString();
+        System.out.println("Sending JSON: " + jsonString);  // Debug line
+        HttpService.post("partie/calendrier", jsonString);
     }
 }

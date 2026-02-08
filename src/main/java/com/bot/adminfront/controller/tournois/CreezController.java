@@ -1,11 +1,11 @@
 package com.bot.adminfront.controller.tournois;
 
+import com.bot.adminfront.service.FederationService;
 import com.bot.adminfront.service.TournoisService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
-
 
 public class CreezController {
 
@@ -16,17 +16,17 @@ public class CreezController {
     @FXML
     private Spinner<Integer> maximum;
     @FXML
-    private TextField federation;
+    private ComboBox<String> federation;
     @FXML
     private ComboBox<String> categorie;
     @FXML
     private Label status;
 
     private final TournoisService tournoisService = new TournoisService();
+    private final FederationService federationService = new FederationService();
 
     @FXML
     public void initialize() {
-
         LocalDate today = LocalDate.now();
 
         dateDebut.setValue(today);
@@ -51,6 +51,7 @@ public class CreezController {
         maximum.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1)
         );
+
         categorie.getItems().addAll(
                 "Moustique",
                 "Atome",
@@ -59,15 +60,28 @@ public class CreezController {
                 "Midget",
                 "Junior"
         );
-        categorie.setValue("Peewee (11-12 ans)");
+        categorie.setValue("Peewee");
+
+        // Load federations from the backend
+        loadFederations();
     }
 
+    private void loadFederations() {
+        try {
+            federation.getItems().clear();
+            federation.getItems().addAll(federationService.list());
+        } catch (Exception e) {
+            status.setText("Erreur de chargement des fédérations");
+            e.printStackTrace();
+        }
+    }
 
     public void creez() {
-        if (federation.getText().isEmpty()
+        if (isComboBoxEmpty(federation)
                 || dateDebut.getValue() == null
                 || dateFin.getValue() == null
-                || maximum.getValue() == null) {  // Spinner can't be null, but just in case
+                || maximum.getValue() == null
+                || isComboBoxEmpty(categorie)) {
             status.setText("Tous les champs sont obligatoires.");
             return;
         }
@@ -80,27 +94,35 @@ public class CreezController {
         boolean success = tournoisService.creez(
                 dateDebut.getValue(),
                 dateFin.getValue(),
-                maximum.getValue(),   // <-- Spinner value
+                maximum.getValue(),
                 categorie.getValue(),
-                federation.getText()
+                federation.getValue()  // Changed from getText() to getValue()
         );
 
-        status.setText(success ? "Créé avec succès." : "Erreur.");
+        if (success) {
+            // Clear form on success
+            dateDebut.setValue(LocalDate.now());
+            dateFin.setValue(LocalDate.now());
+            maximum.getValueFactory().setValue(1);
+            federation.setValue(null);
+            categorie.setValue("Peewee");
+            status.setText("Créé avec succès.");
+        } else {
+            status.setText("Erreur.");
+        }
     }
 
-
-
-    private boolean isEmpty(TextField field) {
-        System.out.println(field.getText());
-        return field == null
-                || field.getText() == null
-                || field.getText().trim().isEmpty();
+    // Helper method to check if ComboBox is empty
+    private boolean isComboBoxEmpty(ComboBox<String> comboBox) {
+        return comboBox.getValue() == null || comboBox.getValue().trim().isEmpty();
     }
+
+    // Keeping these methods in case you need them elsewhere
     private boolean isEmpty(DatePicker picker) {
         return picker == null || picker.getValue() == null;
     }
+
     private boolean isEmpty(Spinner<Integer> spinner) {
-        System.out.println(spinner.getValue());
         return spinner == null ||
                 spinner.getValue() == null ||
                 spinner.getValue() <= 0;
