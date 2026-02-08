@@ -64,9 +64,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="partie">
           <items>
-            <MenuItem mnemonicParsing="false" text="creez" />
-            <MenuItem mnemonicParsing="false" text="supprimer" />
-            <MenuItem mnemonicParsing="false" text="recherche" />
+            <MenuItem mnemonicParsing="false" onAction="#recherchePartie" text="recherche" />
           </items>
         </Menu>
       </menus>
