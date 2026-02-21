@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +27,7 @@ public class TournoisController {
     @FXML private TableColumn<Tournoi, String> maximumColumn;
     @FXML private TableColumn<Tournoi, String> federationColumn;
     @FXML private TableColumn<Tournoi, String> categorieColumn;
-    @FXML private TableColumn<Tournoi, HBox> actionColumn;
+    @FXML private TableColumn<Tournoi, Void> actionColumn;  // Changed from HBox to Void
 
     @FXML private HBox searchContainer;
     @FXML private ChoiceBox<String> filterChoiceBox;
@@ -53,7 +54,14 @@ public class TournoisController {
         maximumColumn.setCellValueFactory(new PropertyValueFactory<>("maximum"));
         federationColumn.setCellValueFactory(new PropertyValueFactory<>("federation"));
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<>("actionButton"));
+
+        // Set cell factory for action buttons
+        actionColumn.setCellFactory(new Callback<TableColumn<Tournoi, Void>, TableCell<Tournoi, Void>>() {
+            @Override
+            public TableCell<Tournoi, Void> call(TableColumn<Tournoi, Void> param) {
+                return new ActionButtonCell();
+            }
+        });
 
         debutColumn.setCellFactory(col -> new DatePickerTableCell(true));
         finColumn.setCellFactory(col -> new DatePickerTableCell(false));
@@ -125,42 +133,6 @@ public class TournoisController {
 
     private void refreshTable(List<Tournoi> list) {
         tournoisList.clear();
-
-        for (Tournoi t : list) {
-            Button save = new Button("Enregistrer");
-            Button delete = new Button("Supprimer");
-            Button calendrier = new Button("Calendrier");
-
-            save.setOnAction(e -> {
-                if (tournoisService.modifier(t)) {
-                    new Alert(Alert.AlertType.INFORMATION, "Tournoi modifié").showAndWait();
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Erreur modification").showAndWait();
-                }
-            });
-
-            delete.setOnAction(e -> supprimer(t));
-
-            calendrier.setOnAction(e -> calendrier(t));
-
-            // Enable calendrier button only if we are within 7 days before debut or after
-            LocalDate debut = LocalDate.parse(t.getDebut());
-            LocalDate oneWeekBeforeDebut = debut.minusWeeks(1);
-            LocalDate today = LocalDate.now();
-
-            // Check if tournament has parties
-            boolean hasParties = t.getParties() != null && !t.getParties().isEmpty();
-
-            // Disable if debut is more than 7 days in the future OR if tournament already has parties
-            calendrier.setDisable(today.isBefore(oneWeekBeforeDebut) || hasParties);
-
-            // Disable save and delete when tournament has parties ← ADD THESE TWO LINES
-            save.setDisable(hasParties);
-            delete.setDisable(hasParties);
-
-            t.setActionButton(new HBox(5, save, delete, calendrier));
-        }
-
         tournoisList.addAll(list);
         tableView.setItems(tournoisList);
     }
@@ -180,10 +152,66 @@ public class TournoisController {
 
     private void calendrier(Tournoi t) {
         tournoisService.calendrier(t.getId());
-
     }
 
     // ================= CUSTOM CELLS =================
+
+    // New ActionButtonCell class
+    private class ActionButtonCell extends TableCell<Tournoi, Void> {
+        private final Button saveButton = new Button("Enregistrer");
+        private final Button deleteButton = new Button("Supprimer");
+        private final Button calendrierButton = new Button("Calendrier");
+        private final HBox hbox = new HBox(5, saveButton, deleteButton, calendrierButton);
+
+        public ActionButtonCell() {
+            saveButton.setOnAction(e -> {
+                Tournoi t = getTableView().getItems().get(getIndex());
+                if (tournoisService.modifier(t)) {
+                    new Alert(Alert.AlertType.INFORMATION, "Tournoi modifié").showAndWait();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Erreur modification").showAndWait();
+                }
+            });
+
+            deleteButton.setOnAction(e -> {
+                Tournoi t = getTableView().getItems().get(getIndex());
+                supprimer(t);
+            });
+
+            calendrierButton.setOnAction(e -> {
+                Tournoi t = getTableView().getItems().get(getIndex());
+                calendrier(t);
+            });
+        }
+
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                setGraphic(null);
+            } else {
+                Tournoi t = getTableRow().getItem();
+
+                // Enable calendrier button only if we are within 7 days before debut or after
+                LocalDate debut = LocalDate.parse(t.getDebut());
+                LocalDate oneWeekBeforeDebut = debut.minusWeeks(1);
+                LocalDate today = LocalDate.now();
+
+                // Check if tournament has parties
+                boolean hasParties = t.getParties() != null && !t.getParties().isEmpty();
+
+                // Disable if debut is more than 7 days in the future OR if tournament already has parties
+                calendrierButton.setDisable(today.isBefore(oneWeekBeforeDebut) || hasParties);
+
+                // Disable save and delete when tournament has parties
+                saveButton.setDisable(hasParties);
+                deleteButton.setDisable(hasParties);
+
+                setGraphic(hbox);
+            }
+        }
+    }
 
     public static class DatePickerTableCell extends TableCell<Tournoi, String> {
 

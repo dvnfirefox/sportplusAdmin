@@ -40,6 +40,8 @@ public class MainMenuController {
     public void rechercheTournois(){loadContent("/com/bot/adminfront/rechercheTournois.fxml");}
     @FXML
     public void recherchePartie(){loadContent(("/com/bot/adminfront/recherchePartie.fxml"));}
+    @FXML
+    public void gestionEquipe(){loadContent(("/com/bot/adminfront/equipes-view.fxml"));}
 
 
     //methode pour changer le contenue de la fenetre selon la page demander par l'utilisateur

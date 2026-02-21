@@ -1,7 +1,5 @@
 package com.bot.adminfront.model;
 
-import javafx.scene.layout.HBox;
-
 public class Partie {
 
     private long id;
@@ -11,7 +9,6 @@ public class Partie {
     private String pointLocal;
     private String equipeVisiteur;
     private String pointVisiteur;
-    private HBox actionButton;
 
     // ================= CONSTRUCTORS =================
 
@@ -85,14 +82,6 @@ public class Partie {
 
     public void setPointVisiteur(String pointVisiteur) {
         this.pointVisiteur = pointVisiteur;
-    }
-
-    public HBox getActionButton() {
-        return actionButton;
-    }
-
-    public void setActionButton(HBox actionButton) {
-        this.actionButton = actionButton;
     }
 
     @Override

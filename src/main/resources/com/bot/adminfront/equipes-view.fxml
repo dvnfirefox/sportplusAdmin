@@ -5,10 +5,10 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.bot.adminfront.controller.PartiesController"
+            fx:controller="com.bot.adminfront.controller.EquipesController"
             prefHeight="600.0" prefWidth="900.0">
 
-    <!-- Search bar + ChoiceBox + Save Button -->
+    <!-- Search bar + ChoiceBox -->
     <HBox spacing="10"
           AnchorPane.topAnchor="10"
           AnchorPane.leftAnchor="10"
@@ -20,11 +20,9 @@
 
         <ChoiceBox fx:id="filterChoiceBox"
                    prefWidth="150"/>
-
-        <Button fx:id="saveAllButton" text="Enregistrer les modifications"/>
     </HBox>
 
-    <!-- TableView for parties -->
+    <!-- TableView for equipes -->
     <TableView fx:id="tableView"
                AnchorPane.topAnchor="50"
                AnchorPane.leftAnchor="10"
@@ -33,12 +31,10 @@
 
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="tournoiColumn" text="Tournoi" prefWidth="100"/>
-            <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-            <TableColumn fx:id="equipeLocalColumn" text="equipe Local" prefWidth="150"/>
-            <TableColumn fx:id="pointLocalColumn" text="Points Local" prefWidth="100"/>
-            <TableColumn fx:id="equipeVisiteurColumn" text="equipe Visiteur" prefWidth="150"/>
-            <TableColumn fx:id="pointVisiteurColumn" text="Points Visiteur" prefWidth="100"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="200"/>
+            <TableColumn fx:id="federationColumn" text="Fédération" prefWidth="200"/>
+            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="200"/>
+            <TableColumn fx:id="actionColumn" text="Action" prefWidth="150"/>
         </columns>
     </TableView>
 </AnchorPane>

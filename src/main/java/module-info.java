@@ -19,10 +19,12 @@ module com.bot.adminfront {
     opens com.bot.adminfront.controller.utilisateur to javafx.fxml;
     opens com.bot.adminfront.controller.officiel to javafx.fxml;
     opens com.bot.adminfront.controller.tournois to javafx.fxml;
-    opens com.bot.adminfront.model to javafx.base,  javafx.fxml;
 
+    // CRITICAL FIX: Open model package to Jackson for JSON deserialization
+    opens com.bot.adminfront.model to javafx.base, javafx.fxml, com.fasterxml.jackson.databind;
 
     // Export packages
     exports com.bot.adminfront;
     exports com.bot.adminfront.controller;
+    exports com.bot.adminfront.model;
 }

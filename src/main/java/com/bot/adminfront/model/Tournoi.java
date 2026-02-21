@@ -1,8 +1,10 @@
 package com.bot.adminfront.model;
 
-import javafx.scene.layout.HBox;
-import java.util.List;  // ← ADD THIS IMPORT
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tournoi {
 
     private String id;
@@ -11,10 +13,7 @@ public class Tournoi {
     private String maximum;
     private String federation;
     private String categorie;
-    private List<Partie> parties;  // ← ADD THIS FIELD
-
-    // Colonne Actions (Enregistrer / Supprimer)
-    private HBox actionButton;
+    private List<Partie> parties;
 
     // Constructeur
     public Tournoi() {}
@@ -58,11 +57,7 @@ public class Tournoi {
         return categorie;
     }
 
-    public HBox getActionButton() {
-        return actionButton;
-    }
-
-    public List<Partie> getParties() {  // ← ADD THIS GETTER
+    public List<Partie> getParties() {
         return parties;
     }
 
@@ -91,11 +86,7 @@ public class Tournoi {
         this.categorie = categorie;
     }
 
-    public void setActionButton(HBox actionButton) {
-        this.actionButton = actionButton;
-    }
-
-    public void setParties(List<Partie> parties) {  // ← ADD THIS SETTER
+    public void setParties(List<Partie> parties) {
         this.parties = parties;
     }
 }
